@@ -1,0 +1,399 @@
+csc.columbusstate.edu/woolbright/class/jcape.doc
+Ruby Socket Programming Tutorial
+
+By: Jesse Cape
+
+
+ 
+	Socket programming is a vast and exciting academic field. Creating and manipulating sockets can be fun, mostly because the hard work writing code actually bears impressive results. However, the topic is so vast it is difficult to cover much more than the tip of the iceberg in this tutorial.
+	The first few programs are designed to get your feet wet, so to speak. We will begin understanding the powerful pairing of the vastness of network programming and the simplicity of Ruby. Code that covers fifty lines and requires over a dozen objects in Java can be done in fewer than ten lines of code in Ruby. Controlling a fleet of of messages being sent hundreds of miles and across continents can be done in about ten minutes. Lets begin. 
+	
+
+Sockets – For those long distance relationships
+	
+	To connect to a computer across a network using code, it makes sense to have an object specially designated to handle the IO involved. This is the primary role of sockets. When you send data to another computer, you send it through a socket. When you receive data from another computer, you receive it through a socket. It is important to note that one socket can handle both input and output. When you add a socket to your code, it can be thought of as giving your program a telephone that can call other programs which also have telephones (sockets).
+ 	When programming, you don't have to worry over the little things such as how the message will get from a socket on one computer to a socket on another computer. This is thanks to a nifty model called the Internet Protocol Stack, which we won't go into in this tutorial (but feel free to Google it).
+			Artist rendering of processes using sockets
+
+
+IP Address – Whats your number?
+	
+	IP addresses are more common knowledge than sockets, and simple enough to understand. Computers connected to a network have IP addresses. If two computers are connected over a network and need to communicate, they must know each others IP address. The IP address is 4 bytes (for Ipv4), with each byte being a number which corresponds to the physical location of that computer. To further expand on the telephone example above, an IP address can be though of as the phone number. 
+	 
+
+
+Port number - Whats your extension?
+
+	An IP address is enough information to navigate a packet of information across the internet. However, the journey is not over once the packet reaches the destination computer. There could be hundreds of processes accessing and communicating over the internet in that single computer. How does the packet know which process called it? This is where the port numbers become useful. If a process on a computer needs to communicate with a process on another computer, it must secure a resource on the computer known as a port. 
+	Ports connect directly to the internet, and since no two processes share a port, a packet can know which process it belongs to just by knowing the port number the process is using. In out telephone analogy, the port is the extension number. Ports have numbers to identify them from other ports. There are 65536 ports in a computer, and ports 0-1023 are well-known port numbers, which means they are designated for certain programs, and should not be used.
+
+	Important:	Note that the range of the well known port numbers is from 0 to 1023. Since they 			are used often by programs on your computer, you should not attempt to use 				them with your process communications. Instead, use your favorite port in 				between 1024 and 65535.
+	
+
+Code and Input/Output Formatting
+	
+	In this tutorial, I will enclose code in the following box, and use the following format:
+sample_code.rb:
+puts(“Hello World!”)  # Writes Hello World to STDOUT
+
+	I will also include user input, and program output. If the program receives input from the user, I will format that input in bold. The program output will be of regular weight. Here is some sample program input/output:
+input/output:
+Enter your name: Jesse
+You said your name was: Jesse
+
+
+	Lets get started programming. The program below will accept a web site as input and through some detective work, find that web site's IP address.
+
+get_IP_address.rb:
+require "socket"
+
+hostname = gets.chomp
+ipaddress = IPSocket.getaddress(hostname)
+puts " -- IP Address: #{ipaddress}"
+	
+input/output:
+www.columbusstate.edu
+ -- IP Address: 168.26.189.230
+
+	Seriously, it is that easy. In four lines of code, we created a program that packs quite a punch. Now lets dissect the code to understand what is actually happening line by line:
+
+require “socket” 
+	This line is simple enough. We are using a socket in our code, and we have to include Ruby's socket library to have access to it. 
+
+hostname = gets.chomp	
+	I decided to make the program interactive, so this line gets input through STDIN (most likely your console). The chomp method erases the new line character generated when the website is entered.
+
+ipaddress = IPSocket.getaddress(hostname)	
+	Here is where the magic happens. IPSocket is the socket used in this program. In this case we are not creating an instance of it, instead we use one of its class methods to resolve the IP address of a host name. In other words, we pass a website name to the class method IPSocket.getaddress and it will return the IP address of that web site. The final line simply displays the IP address to STDOUT (your screen).
+
+IPSocket.getaddress(host) => address
+The getaddress method of IPSocket takes as an argument a host name. This is simply a web site, such as “www.google.com”. This method returns the IP address of that host name.
+
+
+The Domain Name Server (DNS)
+
+	The above program sends a host-name through an method of IP Socket, which returns the IP address associated with that name. Web site addresses such as “www.google.com or “www.columbusstate.edu” are in host-name form. These are easy for the average user to remember, but not much use to a computer. Computers prefer numbers such as IP addresses, because numbers can represent logical locations of computes over a network. If your are still following the telephone simile, the perfect way to think of the DNS is as a phone book.
+	Web sites have IP addresses associated with them, as we saw in the code above. A web site and its IP address are stored in servers known as Domain Name Servers. These servers contain lists of web pages and their corresponding IP addresses. Our code actually sent a request to a DNS to resolve the host-name, which means it returns the IP address linked to that host name. This is a very useful tool when you know a website name, but need its IP address. 
+		
+
+			Above: A client picking up a server
+
+
+
+
+Client/Server – It takes two to tango
+
+	Clients and servers are the computers involved in the transfer of data through a connection over a network. A server process is always running, can communicate back and forth with a client, and can often handle multiple clients simultaneously.
+	 Clients are simpler than servers in some aspects. A client processes is not required to always be running. A client process can attempt to connect to a computer running a server process (the server process must be running first), and can connect/disconnect whenever it wants. It also must be able to communicate back and forth with a server. When a client process attempts to connect to a computer running a server process, the server process must accept the client before communication can begin. 
+
+	Important:	A common mistake is attempting to connect to a computer through a client 				process before the server process is running. The server process must be running 				on the target computer before a client process can attempt a connection.
+
+
+	In a short amount of time, we have covered a large amount of information, and done a little coding. Since this is a programming tutorial, it only seems right to include some more code. In the following program we create a server socket and a client socket and have them communicate:
+
+simple_connection.rb:
+require “socket”
+
+server = TCPServer.new(“0.0.0.0”, 5309)
+client = TCPSocket.new(“localhost”, 5309)
+
+server = server.accept
+
+server.puts(“Ring ring. Ring ring”)
+puts(“[client received]: #{client.gets()}”)
+
+client.puts(“Who is it?”)
+puts(“[server received]: #{server.gets()}”)
+
+server.puts(“Hello. My name is Sir Vernon. My friends call me Sir Ver.”)
+puts(“[client received]: #{client.gets()}”)
+
+client.puts(“...I'm leaving.”)
+puts(“[server received]: #{server.gets()}”)
+
+Input/output
+client received]: Ring ring. Ring ring
+[server received]: Who is it?
+[client received]: Hello. My name is Sir Vernon. My friends call me Sir Ver.
+[server received]: ...I'm leaving.
+
+
+	Finally, we get to see some real internet action. Usually the server and client are not in the same program, but this allows us to see their interaction much easier. So, apart from set up of one of the lamest jokes ever invented by man, what exactly happened here?
+ 
+server = TCPServer.new(“0.0.0.0”, 5309)
+client = TCPSocket.new(“localhost”, 5309)
+	 Here, a new server and a new client process are created. In the server arguments, “0.0.0.0” specifies that it will listen for all IP addresses (you can specify a specific address here if the process will only be listening for one). The number 5309 is the port number the sockets will use to communicate through. The port number must be the same for both the server and the client. Finally, the client argument “localhost” is used when the client and server are communicating on the same computer. If the server was located on another computer, the IP address of that computer would be substituted here.
+
+client = TCPSocket.new(“localhost”, 5309)
+
+server = server.accept
+	A server must accept a client before they can communicate. Creating a client process automatically sends a connection request to the server at the specified IP address in the TCPSocket.new arguments. Since the IP address was directed towards the local host (the same computer  the client is running on), the server object receives the request. To establish a connection, we call server.accept, to accept that connection. The return value of server.accept is the connected socket, which we just set equal to server (which was previously a non-connected socket).
+	
+	Important:	A common mistake is to create a new TCPSocket object before a server socket 				has been set up. Remember when a TCPSocket is created, it immediately sends a 			connection request using the IP address specified.
+	
+
+
+server.puts(“Ring ring. Ring ring”)
+	Remember the server object is a socket connected to the client. If you give it a message, it will automatically send the data to the client. This is exactly what the puts method does. Sockets use it to  send messages to the socket they are connected to. In this case, we put the message “Ring ring. Ring ring” to the server socket, which automatically sends it through the network to the client socket. 
+
+puts(“[client received]: #{client.gets()}”)
+	Here we see the client receiving the message sent from the server. The gets method retrieves the message that was sent to the socket and returns it as a string. We use the Kernel puts command to illustrate this by writing it as a string to STDOUT.
+
+TCPServer.new([hostname], port) => tcpserver
+Initializing a new TCPServer requires a port number. This is the port number the TCPServer object will bind to, and any messages will be sent through that port. The hostname argument is optional, but is needed for the server object to communicate with an external process. Sending an empty string (“”), or the string “0.0.0.0” will allow the server to accept all IP addresses. However, specifying an IP address, such as “123.23.345.45” binds it to that IP address, and it cannot accept packets that come from any other IP addresses. This method returns the bound (connected) TCPServer object. 
+
+TCPSocket.new(hostname, port) => tcpsocket
+Initializing a new TCPSocket has similar requirements to a TCPServer. The only difference in the arguments is that the hostname is required for TCPSocket. During TCPSocket's initialization, it sends  a connection request over the network to the computer located at the hostname address, and to the port number specified. If there is not a server processes ready at the target computer, the connection request will be automatically denied. 
+
+TCPSocket.puts(message) and TCPServer.puts(message)
+TCPSocket and TCPServer are both essentially IO objects, so they have exclusive access to the IO  methods. The puts method works  just as it does for other IO objects. When you wish to send a message through an IO object, you simply call the puts method, and insert your message as the argument. The gets(message) methods work the same as with other IO objects as well. It receives a message from an object it has access to.
+	In the previous example, we saw client and server sockets communicating through a network, however they were both contained in the same process. And I must confess, I mislead you. There was actually no internet communication happening, because we specified local host as the IP address. It is a perfectly good simulation and shows exactly how the processes will handle communicating across a real network, but it is not the real thing. If you want, you can run the previous code with no internet connection, and the program will run just fine.
+	We are adding a few things to the code below that were obviously lacking from the example above. First, as stated, client and servers are little use contained in the same process. Since they exist so separate processes can interact on separate end systems (any device with an internet connection), it only makes since to keep them separate. Second, since I admitted the last example did not actually make use of the internet, this code will make up for it. So, whenever you are ready, here is our next advancement in socket programming:
+
+	Important:	The last line in simple_client.rb has an IP address used in it. You will need to  	substitute that IP address with the IP address of whatever computer you have running 	simple_server.rb. To find the IP address in Linux, type “ifconfig” in the terminal. In 	windows, type “ipconfig” in the command prompt. 
+
+simple_server.rb:
+require "socket"
+
+class Server
+  def initialize
+    @server = TCPServer.new("", 2700)
+    listen()
+    run()
+  end
+
+  # When a client process attempts to connect, accept it and send acceptance msg
+  def listen()
+    @server = @server.accept
+    puts("Accepted new client!")
+    @server.puts("Welcome to the server")
+  end
+
+  # Continuously loop between getting input from STDIN and broadcasting
+  def run()
+    while true
+      getinput()
+      broadcast()
+    end
+  end
+
+  # Get input from the STDIN device
+  def getinput()
+    @msg = gets
+  end
+
+  # broadcast a message to the client
+  def broadcast()
+    @server.puts("server >> #{@msg}")
+  end
+end
+
+puts "Setting up a new server using port 2700..."
+s = Server.new()
+
+simple_client.rb:
+require "socket"
+
+class Client
+  def initialize(hostname, port)
+    @client = TCPSocket.new(hostname, port)
+    run()
+  end
+
+  # Continuously wait for messages and then display them
+  def run()
+    while true
+      getmessage()
+      displaymessage()
+    end
+  end
+
+  # Wait for a message to become available in the client socket
+  def getmessage()
+    @msg = @client.gets
+  end
+  
+  # Display the client socket's message
+  def displaymessage()
+    puts @msg.chop
+  end
+end
+
+c = Client.new("193.168.1.87", 2700)
+
+simple_server.rb input/output:
+Setting up a new server using port 2700...
+Accepted new client!
+I've accepted you!
+Welcome to the party. 
+Does this conversation seem a bit one-sided?
+
+simple_client.rb input/output:
+Welcome to the server
+server >> I've Accepted you!
+server >> Welcome to the party.
+server >> Does this conversation seem a bit one-sided?
+
+	I have emphasized this before, and I will do it again: make sure the server process is running before you run the client process! There is nothing for the client to connect to if there is no server waiting to accept clients. Okay, with that out of the way, there is something I want you to notice. There are no new concepts in this code. Absolutely none at all. Everything we do with the client and server processes, we have stolen almost verbatim from previous code. However, there is a construct here we haven't used yet: the infinite loop.
+	Both the client and server code include infinite loops. Essentially, they will run forever until interrupted by some outside force.  Notice the server does two things in the loop. First, it waits for a message from the user.  Once it has input to work with, it sends the input to the client, then waits for more input
+	The client loop is simple as well. First it sits and waits for a message to become available from the server. Once data is sent to the client, it takes the message and prints it to STDOUT, then goes back to waiting for another message.
+
+	This last program will be the final one of the tutorial, and we are going to recruit some help, by using a program called telnet. Telnet uses a network protocol called telnet (creative, huh?) which allows a user to interact with programs over a network with text. Telnet is installed on most computers, but if you are running a version of Windows newer than XP, you will need to enable it by following the steps below. To check if telnet is running, open the terminal/command prompt and type telnet. This should prompt a telnet session to begin. If it worked, type 'q' to quit, and you can skip ahead to the code. If not, and you are running Windows, follow the steps below:
+
+Start => Control Panel => Programs and Features => Turn Windows features on or off
+Follow the path above, then find telnet in the list of programs that appears, then click OK. To ensure it enabled properly, you should run the test specified above. 
+
+	Important:	You are creating a server for clients to communicate through in the code below, 				so make sure the code is running before you attempt to connect using telnet. 				Remember to use the same port numbers, and remember that if you are using 				telnet from a separate computer, you must provide the IP address of the computer 			with the code running on it for the telnet session to connect to it.
+
+
+ruby_chat_server.rb
+require "socket"
+
+class ChatServer
+  def initialize(port)
+    @sockets = Array.new
+
+    @server = TCPServer.new("", port)
+    puts("Ruby chat server started on port #{port}\n")
+    @sockets.push(@server)
+    run()
+  end
+
+  def run
+    while true
+
+      # The select method will take as an argument the array of sockets, and return a socket that has    
+      # data to be read
+      ioarray = select(@sockets, nil, nil, nil)
+
+        # the socket that returned data will be the first element in this array
+        for sock in ioarray[0]
+          if sock == @server then
+            accept_client
+          else
+            # Received something on a client socket
+            if sock.eof? then
+              str = "Client left #{sock.peeraddr[2]}"
+              broadcast(str, sock)
+              sock.close
+              @sockets.delete(sock)
+            else
+              str = "[#{sock.peeraddr[2]}]: #{sock.gets()}"
+              broadcast(str, sock)
+            end
+          end
+        end
+    end
+  end
+
+  def accept_client
+    newsocket = @server.accept # Accept newsocket's connection request
+
+    # add newsockets to the list of connected sockets
+    @sockets.push(newsocket)
+    
+    # Inform the socket that it has connected, then inform all sockets of the new connection
+    newsocket.puts("You're connected to the Ruby Chat Server! Woohoo")
+    str = "Client joined #{newsocket.peeraddr[2]}\n"
+    broadcast(str, newsocket)
+  end
+
+  def broadcast(str, omit_sock)
+    # Send the string argument to every socket that is not the server,
+    # and not the socket the broadcast originated from.
+    @sockets.each do |client|
+      if client != @server && client != omit_sock then
+        client.puts(str)
+      end
+    end
+    # Print all broadcasts to the server's STDOUT
+    print(str)
+  end
+end
+
+myChatServer = ChatServer.new(2700)
+
+Linux terminal telnet session input/output:    (user:localhost.localdomain:52871)
+telnet localhost 2700
+Trying 127.0.0.1...
+Connected to localhost.
+Escape character is '^]'
+You're connected to the Ruby Chat Server! Woohoo
+Hello World!
+Please don't let this be another one sided conversation..
+Client joined Toshiba-cape:49360
+[Toshiba-cape:49360]: Hello? Is there anybody in there? Just nod if you can hear me.
+Finally! I get to talk to someone over the internet!
+[Toshiba-cape:49360]: That wasnt a nod...
+Client left Toshiba-cape:49360
+
+Windows command prompt telnet session input/output:    (user:Toshiba-cape:49360)
+telnet 192.168.1.87 2700
+You're connected to the Ruby Chat Server! Woohoo
+Hello? Is there anybody in there? Just nod if you can hear me.
+[localhost.localdomain:52871]: Finally! I get to talk to someone over the internet!
+That wasnt a nod...
+
+ruby_chat_server.rb input/output:
+Ruby chat server started on port 2700
+Client joined localhost.localdomain:52871
+[localhost.localdomain:52871]: Hello World!
+[localhost.localdomain:52871]: Please dont let this be another one sided conversation..
+Client joined TOSHIBA-cape:49360
+[TOSHIBA-cape:49360]: Hello? Is there anybody in there? Just nod if you can hear me.
+[localhost.localdomain:52871]: Finally! I get to talk to someone over the internet!
+[Toshiba-cape:49360]: That wasnt a nod...
+Client left TOSHIBA-cape:49360
+Client left localhost.localdomain:49360
+
+	I had the chat server running on my linux system, as you should be able to tell because the ip address of that telnet argument was “localhost”. I had a separate windows machine running and telnet in, and I had to provide the IP address of the linux machine, since it was connecting to a different system. I had two telnet connections communicating, but using this code, more sessions is possible. I also downloaded a telnet program to my Andriod smart phone and was able to connect and communicate to the server using it.
+
+
+	Important:	I'm not sure why, but I was unable to successfully connect two computers which 				were not part of the same network. Both computers used in the example above 				were connected through my home network. However, when I attempted to				 connect a computer that was on my neighbor's network, it would not work. 
+
+
+
+
+
+	With this being the last program, it seemed right to leave you with quite a bit to think about. One of the first things you should notice is that we created a server process, and were able to talk to an entirely different program (telnet) through it. All we created was a server to handle the connections, and we were able to connect to that server using telnet. 
+
+class ChatServer
+  def initialize(port)
+    @sockets = Array.new
+
+    @server = TCPServer.new("", port)
+    puts("Ruby chat server started on port #{port}\n")
+    @sockets.push(@server)
+    run()
+  end
+	There isn't much new in the initialize method. We create an array to handle multiple sockets, and then call the run method. You should be familiar with the rest by now. 
+
+ioarray = select(@sockets, nil, nil, nil)
+	Here is something we haven't seen yet, and is slightly complex. The select method takes four arguments, the first three being IO arrays. When an IO array is passed as the first argument, the select method “listens” too all the elements in the array, waiting for new information (connection information or messages) to become available in those IO objects. The second and third arguments also take IO arrays, but are handled differently. The return value is a three-element array containing arrays of the IO objects that have new information. However, since we send our IO object array as the first argument, the only element in the returned array we are worried about is the first element. 
+
+        for sock in ioarray[0]
+          if sock == @server then
+            accept_client
+	Here we are getting the socket that had new information, which was returned by the select method. If that socket was the server socket and has new information, it means a client is attempting to connect.
+
+if sock.eof? then
+	The TcpSocket.eof? method returns true if the socket connection has ended in any way.
+
+str = "Client left #{sock.peeraddr[2]}"
+            The TcpSocket.peeraddr array contains three elements. The second element is the local host name, which is doubling as the user name for this program.
+
+
+Kernel.select( readArray, [writeArray], [errorArray], [timeout]) => IO object Array or nil
+This method waits for data to become available IO objects. The first three parameters are arrays of IO objects, or nil. The last is a timeout value in seconds, which should be an integer or float. The call waits for data to become available for any of the IO objects in readArray, for buffers to have cleared sufficiently to enable writing to any of the devices in writeArray, or for an error to occur on the devices in errorArray. If one or more of these conditions are met, the call returns a three-element array containing arrays of the IO objects that were ready. Otherwise, if there is no change in status for timeout number of seconds, the call returns nil.
+
+
+
+	The code that was not explained in further detail is not much different than code in the earlier examples, and should not be difficult to understand. This last program we wrote shows the flexibility of programming with sockets. We used a program completely unrelated to what we created to communicate through. This worked because the communication protocols were the same between our program and telnet. 
+	Hopefully the programs we covered were informative enough to give you a basic understanding of socket programming, and left you wanting to understand more about the topic in general. Below I have included some websites for a more in-depth study of the topic. Happy coding!
+
+
+Web Sites
+
+http://www.ruby-doc.org/stdlib/libdoc/socket/rdoc/classes/Socket.html
+http://www.tutorialspoint.com/ruby/ruby_socket_programming.htm
+http://rubylearning.com/satishtalim/ruby_socket_programming.html

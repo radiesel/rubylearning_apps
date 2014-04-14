@@ -1,0 +1,100 @@
+!::: ::\
+ALLUSERSPROFILE: C:\ProgramData
+AMDAPPSDKROOT: C:\Program Files (x86)\AMD APP\
+APPDATA: C:\Users\RAD\AppData\Roaming
+ASL.LOG: Destination=file
+CHOCOLATEYINSTALL: C:\Chocolatey
+COMMONPROGRAMFILES(X86): C:\Program Files (x86)\Common Files
+COMMONPROGRAMFILES: C:\Program Files (x86)\Common Files
+COMMONPROGRAMW6432: C:\Program Files\Common Files
+COMPUTERNAME: RAD-HP-WIN7PRO
+COMSPEC: C:\windows\system32\cmd.exe
+FP_NO_HOST_CHECK: NO
+GNUPGHOME: c:/Users/RAD/.gnupg
+GOPATH: C:\GOCODE\
+GOROOT: C:\Go\
+HEROKUPATH: C:\Program Files (x86)\Heroku
+HISTFILE: c:/Users/RAD/.bash_history
+HOME: c:/Users/RAD
+HOMEDRIVE: C:
+HOMEPATH: \Users\RAD
+INPUTRC: C:/Program Files (x86)/Git/etc/inputrc
+LESS: -FRSX
+LESSCHARSET: utf-8
+LOCALAPPDATA: C:\Users\RAD\AppData\Local
+LOGNAME: RAD
+LOGONSERVER: \\RAD-HP-WIN7PRO
+MAKE_MODE: unix
+MSYSTEM: MINGW32
+NUMBER_OF_PROCESSORS: 8
+OLDPWD: c:/Rails_Projects/rad_sample_app
+ONLINESERVICES: Online Services
+OS: Windows_NT
+PATH: c:\Users\RAD\bin;.;C:\Program Files (x86)\Git\local\bin;C:\Program Files (
+x86)\Git\mingw\bin;C:\Program Files (x86)\Git\bin;c:\Perl64\site\bin;c:\Perl64\b
+in;c:\Python27\;c:\Python27\Scripts;c:\Program Files (x86)\Intel\iCLS Client\;c:
+\Program Files\Intel\iCLS Client\;c:\Program Files (x86)\AMD APP\bin\x86_64;c:\P
+rogram Files (x86)\AMD APP\bin\x86;c:\windows\system32;c:\windows;c:\windows\Sys
+tem32\Wbem;c:\Program Files (x86)\ATI Technologies\ATI.ACE\Core-Static;c:\Progra
+m Files (x86)\Hewlett-Packard\HP ProtectTools Security Manager\Bin\;c:\Program F
+iles (x86)\Putty\;c:\Program Files (x86)\GTK2-Runtime\bin;c:\xampp\php;c:\Progra
+m Files\Intel\Intel(R) Management Engine Components\DAL;c:\Program Files\Intel\I
+ntel(R) Management Engine Components\IPT;c:\Program Files (x86)\Intel\Intel(R) M
+anagement Engine Components\DAL;c:\Program Files (x86)\Intel\Intel(R) Management
+ Engine Components\IPT;c:\Program Files\nodejs\;c:\Go\bin;c:\Program Files (x86)
+\Heroku\bin;C:\Program Files (x86)\Git\cmd;c:\windows\System32\WindowsPowerShell
+\v1.0\;c:\windows\System32\WindowsPowerShell\v1.0\;c:\Program Files\Perforce;c:\
+Program Files (x86)\PostgreSQL\9.3;c:\RailsInstaller\Git\cmd;c:\RailsInstaller\R
+uby1.9.3\bin;c:\Tcl\bin;c:\Users\RAD\AppData\Roaming\Python\Scripts;c:\Users\RAD
+\AppData\Roaming\npm;c:\Program Files\SublimeText2;c:\dev\utils;c:\windows\syste
+m32\WindowsPowerShell\v1.0\;c:\Perl64\site\bin;c:\Perl64\bin;c:\Python27\;c:\Pyt
+hon27\Scripts;c:\Program Files (x86)\Intel\iCLS Client\;c:\Program Files\Intel\i
+CLS Client\;c:\Program Files (x86)\AMD APP\bin\x86_64;c:\Program Files (x86)\AMD
+ APP\bin\x86;c:\windows\system32;c:\windows;c:\windows\System32\Wbem;c:\windows\
+System32\WindowsPowerShell\v1.0\;c:\Program Files (x86)\ATI Technologies\ATI.ACE
+\Core-Static;c:\Program Files (x86)\Hewlett-Packard\HP ProtectTools Security Man
+ager\Bin\;c:\Program Files (x86)\Putty\;c:\Program Files (x86)\GTK2-Runtime\bin;
+c:\xampp\php;c:\Program Files\Intel\Intel(R) Management Engine Components\DAL;c:
+\Program Files\Intel\Intel(R) Management Engine Components\IPT;c:\Program Files
+(x86)\Intel\Intel(R) Management Engine Components\DAL;c:\Program Files (x86)\Int
+el\Intel(R) Management Engine Components\IPT;c:\Program Files\nodejs\;c:\Go\bin;
+c:\Program Files (x86)\Heroku\bin;C:\Program Files (x86)\Git\cmd;c:\Program File
+s (x86)\PostgreSQL\9.3;c:\RailsInstaller\Git\cmd;c:\RailsInstaller\Ruby1.9.3\bin
+;c:\Tcl\bin;c:\Users\RAD\AppData\Roaming\Python\Scripts;c:\Users\RAD\AppData\Roa
+ming\npm;c:\Program Files\SublimeText2;c:\dev\utils;c:\Chocolatey\bin;.
+
+PATHEXT: .COM;.EXE;.BAT;.CMD;.VBS;.VBE;.JS;.JSE;.WSF;.WSH;.MSC;.py;.pyw
+PCBRAND: s
+PLATFORM: BNB
+PLINK_PROTOCOL: ssh
+PROCESSOR_ARCHITECTURE: x86
+PROCESSOR_ARCHITEW6432: AMD64
+PROCESSOR_IDENTIFIER: Intel64 Family 6 Model 58 Stepping 9, GenuineIntel
+PROCESSOR_LEVEL: 6
+PROCESSOR_REVISION: 3a09
+PROGRAMDATA: C:\ProgramData
+PROGRAMFILES(X86): C:\Program Files (x86)
+PROGRAMFILES: C:\Program Files (x86)
+PROGRAMW6432: C:\Program Files
+PSMODULEPATH: C:\windows\system32\WindowsPowerShell\v1.0\Modules\
+PTSMINSTALLPATH_X86: C:\Program Files (x86)\Hewlett-Packard\HP ProtectTools Secu
+rity Manager\
+PUBLIC: C:\Users\Public
+PWD: c:/Rails_Projects/rubylearning
+R_PROJ: C:\Rails_Projects\
+SESSIONNAME: Console
+SHLVL: 1
+SYSTEMDRIVE: C:
+SYSTEMROOT: C:\windows
+TEMP: C:/Users/RAD/AppData/Local/Temp
+TERM: cygwin
+TMP: C:/Users/RAD/AppData/Local/Temp
+USER: RAD
+USERDOMAIN: RAD-HP-WIN7PRO
+USERNAME: RAD
+USERPROFILE: C:\Users\RAD
+VBOX_INSTALL_PATH: C:\Program Files\Oracle\VirtualBox\
+WINDIR: C:\windows
+WINDOWS_TRACING_FLAGS: 3
+WINDOWS_TRACING_LOGFILE: C:\BVTBin\Tests\installpackage\csilogfile.log
+_: c:/RailsInstaller/Ruby1.9.3/bin/ruby
